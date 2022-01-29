@@ -35,7 +35,6 @@ npm install
 ````
 
 The demo requires MySql to run.  Use the init.sql script to create the database and tables required by the app
-Edit \src\config\dbConfig.js to add the connect details to your mySql instance
 
 Next, create a .env file in the repository root folder, copy the following and complete the details with your settings
 ````
