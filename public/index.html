@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>The Random Joke App</title>
+        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+    </head>
+    <body>
+        <div class="hero-image"></div>
+        <div class="glass"></div>
+
+        <div class="jokeContainer">
+            <h1>The Random Joke App</h1>
+            <p id="setup" class="jokeText">Loading...</p>
+            <p id="punchline" class="jokeText">...Please wait</p>
+            <p id="instructions" class="instructionText"></p>            
+        </div>
+
+        <div class="credits">
+            Credits:
+            Developed by <a href="https://github.com/zjcz/" target="_blank">Jon Clarke</a>, 
+            Jokes by <a href="https://github.com/15Dkatz/official_joke_api" target="_blank">David Katz</a>,
+            Photo by <a href="https://unsplash.com/@timmossholder?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank">Tim Mossholder</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank">Unsplash</a>
+        </div>
+    </body>
+
+    <script>        
+        async function nextStep() {
+            const instructionsField = document.getElementById("instructions");
+            const punchlineField = document.getElementById("punchline");
+            if (punchlineField.style.display === "none") {
+                punchlineField.style.display = "block";
+                instructionsField.innerText ="click for next joke";
+            } else {
+                await getJoke();
+                instructionsField.innerText ="click to reveal the punchline";
+            }
+        }
+
+        async function getJoke() {
+            const setupField = document.getElementById("setup");
+            const punchlineField = document.getElementById("punchline");
+            const jokeResponse = await fetch("/api/getJoke");
+            const joke = await jokeResponse.json();
+
+            if (joke) {
+                setupField.innerText = joke.setup;
+                punchlineField.innerText = joke.punchline;
+                punchlineField.style.display = "none";
+            }
+        }
+        
+        async function init() {
+            await nextStep();
+            document.body.addEventListener('click', nextStep, true);                     
+        }
+        
+        init();
+    </script>
+</html>
